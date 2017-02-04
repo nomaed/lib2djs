@@ -45,7 +45,7 @@ export class Scene {
   public render() {
     this.clear();
     for (const shape of this.shapes) {
-      shape.render(this.ctx);
+      shape.render(this);
     }
   }
 }

@@ -1,25 +1,39 @@
-import { Timer } from './util/Timer';
 import { Shape } from './libgfx/Shape';
-import { Circle } from './libgfx/Circle';
 import { Scene } from './libgfx/Scene';
+import { Timer } from './util/Timer';
+import { Planet } from './Shapes/Planet';
+import { ResolutionDisplay } from './Shapes/ResolutionDisplay';
 import { debounce } from './util/debouce';
 
 const FPS = 100;
+const NUM_PLANETS = 4;
+const G = 0.00001;
 
+const planets = new Set<Planet>();
 let scene: Scene;
+let sceneTimer: Timer;
+let animTimer: Timer;
 
 export function bootstrap(canvas: HTMLCanvasElement) {
-  const timer = new Timer(1000 / FPS);
+  sceneTimer = new Timer(1000 / FPS);
+  animTimer = new Timer(25);
 
   scene = new Scene(canvas.getContext('2d'));
   scene.backgroundColor = '#333';
   scene.foregroundColor = 'white';
 
   scene.addShape(new ResolutionDisplay());
-  timer.addListener(() => window.requestAnimationFrame(() => scene.render()));
+  sceneTimer.addListener(() => window.requestAnimationFrame(() => scene.render()));
+  animTimer.addListener(() => {
+    console.log('anim');
+    animate();
+  });
 
   window.addEventListener('resize', <EventListener>debounce(() => updateCanvasSize(), 100));
+  window.addEventListener('click', restart);
+
   updateCanvasSize();
+  restart();
 }
 
 function updateCanvasSize() {
@@ -28,23 +42,47 @@ function updateCanvasSize() {
   canvas.height = window.innerHeight;
 }
 
-class ResolutionDisplay implements Shape {
-  public render(ctx: CanvasRenderingContext2D) {
-    const width = scene.width;
-    const height = scene.height;
-    const fontSizePx = 12;
-    const text = `${width}x${height}`;
-    ctx.font = `${fontSizePx}px monospace`;
-
-    const textWidth = ctx.measureText(text).width;
-
-    ctx.fillStyle = 'rgba(200, 200, 0, .15)';
-    ctx.fillRect(width - textWidth - 8, height - fontSizePx - 8, textWidth + 6, fontSizePx + 6);
-
-    ctx.strokeStyle = scene.foregroundColor;
-    ctx.strokeRect(width - textWidth - 8, height - fontSizePx - 8, textWidth + 6, fontSizePx + 6);
-
-    ctx.fillStyle = scene.foregroundColor;
-    ctx.fillText(text, width - textWidth - 5, height - 7);
-  }
+function restart() {
+  animTimer.stop();
+  planets.forEach(p => scene.removeShape(p));
+  planets.clear();
+  addPlanets();
+  animTimer.start();
 }
+
+function addPlanets() {
+  for (let i = 0; i < NUM_PLANETS; i++) {
+    const r = Math.random() * 100;
+    const x = Math.random() * (scene.width - (2 * r)) + r;
+    const y = Math.random() * (scene.height - (2 * r)) + r;
+    planets.add(new Planet(x, y, r, 'white'));
+  }
+
+  planets.forEach(p => scene.addShape(p));
+}
+
+function force(m1: number, m2: number, d: number): number {
+  return G * m1 * m2 / d * d;
+}
+
+// function accel(m)
+
+function animate() {
+  if (!planets.size) return;
+  planets.forEach(p1 => {
+    planets.forEach(p2 => {
+      if (p1 === p2) return;
+      const f = force(p1.r, p2.r, p1.distance(p2));
+      const dx = (p2.x - p1.x) / p1.r;
+      const dy = (p2.y - p1.y) / p1.r;
+      p1.vx += f * dx;
+      p1.vy += f * dy;
+    });
+  });
+
+  planets.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+  });
+}
+

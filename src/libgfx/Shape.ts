@@ -1,3 +1,5 @@
+import { Scene } from './Scene';
+
 export interface Shape {
-  render(ctx: CanvasRenderingContext2D): void;
+  render(scene: Scene): void;
 }

@@ -1,3 +1,4 @@
+import { Scene } from './Scene';
 import { Shape } from './Shape';
 
 const ANGLE_END = Math.PI * 2;
@@ -11,8 +12,9 @@ export class Circle implements Shape {
     public fillColor?: string
   ) { }
 
-  public render(ctx: CanvasRenderingContext2D) {
+  public render(scene: Scene) {
     if (!this.r) return;
+    const ctx = scene.ctx;
     ctx.beginPath();
     if (this.strokeColor) ctx.strokeStyle = this.strokeColor;
     if (this.fillColor) ctx.fillStyle = this.fillColor;
