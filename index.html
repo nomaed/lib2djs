@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>lib2djs</title>
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <script src="node_modules/systemjs/dist//system.js"></script>
+  <script src="config.js"></script>
+  <script>
+    System.import('src/main.ts')
+      .then((main) => {
+        main.bootstrap(document.getElementById('page_canvas'));
+      });
+  </script>
+</head>
+
+<body>
+  <canvas id="page_canvas"></canvas>
+</body>
+
+</html>

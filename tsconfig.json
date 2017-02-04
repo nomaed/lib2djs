@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "target": "es6",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "outDir": "./out"
+    },
+    "compileOnSave": true,
+    "files": [
+      "src/main.ts"
+    ]
+}
