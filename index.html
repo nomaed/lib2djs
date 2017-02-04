@@ -4,9 +4,32 @@
 <head>
   <title>lib2djs</title>
   <link rel="stylesheet" type="text/css" href="css/main.css">
-  <script src="node_modules/systemjs/dist//system.js"></script>
-  <script src="config.js"></script>
+  <script src="node_modules/systemjs/dist/system.js"></script>
+  <script src="node_modules/typescript/lib/typescript.js"></script>
   <script>
+    System.config({
+      packages: {
+        ts: {
+          main: "plugin.js"
+        },
+        typescript: {
+          main: "lib/typescript.js",
+          meta: {
+            "lib/typescript.js": {
+              "exports": "ts"
+            }
+          }
+        },
+        src: {
+          defaultExtension: 'ts'
+        }
+      },
+      map: {
+        ts: "node_modules/plugin-typescript/lib",
+        typescript: "node_modules/typescript"
+      },
+      transpiler: 'ts'
+    });
     System.import('src/main.ts')
       .then((main) => {
         main.bootstrap(document.getElementById('page_canvas'));
