@@ -52,10 +52,13 @@ function restart() {
 
 function addPlanets() {
   for (let i = 0; i < NUM_PLANETS; i++) {
-    const r = Math.random() * 100;
+    const r = Math.random() * 10;
     const x = Math.random() * (scene.width - (2 * r)) + r;
     const y = Math.random() * (scene.height - (2 * r)) + r;
-    planets.add(new Planet(x, y, r, 'white'));
+    const planet = new Planet(x, y, r, 'white');
+    planet.vx = Math.random() * 10 - 5;
+    planet.vy = Math.random() * 10 - 5;
+    planets.add(planet);
   }
 
   planets.forEach(p => scene.addShape(p));
