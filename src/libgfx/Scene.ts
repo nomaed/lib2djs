@@ -43,7 +43,7 @@ export class Scene {
   }
 
   public render() {
-    this.clear();
+    // this.clear();
     for (const shape of this.shapes) {
       shape.render(this);
     }
