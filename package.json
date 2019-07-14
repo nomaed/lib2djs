@@ -5,11 +5,11 @@
   "author": "Boris Aranovich <nomaed@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "jspm": "^0.16.52",
-    "plugin-typescript": "^6.0.4",
-    "systemjs": "^0.20.5",
-    "tslint": "^4.4.2",
-    "typescript": "^2.1.5"
+    "jspm": "^2.0.0-beta.6",
+    "plugin-typescript": "8",
+    "systemjs": "4",
+    "tslint": "5",
+    "typescript": "3"
   },
   "jspm": {
     "dependencies": {
